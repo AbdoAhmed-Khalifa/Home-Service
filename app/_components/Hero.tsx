@@ -15,7 +15,7 @@ export default function Hero() {
       <div className="mt-4 flex items-center gap-4">
         <Input
           placeholder="Search"
-          className="rounded-full md:w-[350px]
+          className="rounded-full sm:w-[350px]
         focus:outline-none"
         />
         <Button

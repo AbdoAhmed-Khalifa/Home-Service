@@ -1,6 +1,7 @@
 import request, { gql } from 'graphql-request';
 import { GraphCategoriesType } from '../_types/graphCategoriesType';
 import { BusinessListsType } from '../_types/businessListsType';
+import { BusinessListType } from '../_types/businessListType';
 
 const MASTER_URL = `https://api-eu-central-1-shared-euc1-02.hygraph.com/v2/${process.env.NEXT_PUBLIC_MASTER_URL_KEY}/master`;
 
@@ -47,7 +48,73 @@ async function getAllBusinessList(): Promise<BusinessListsType> {
     businessLists: BusinessListsType;
   };
   // await new Promise(res => setTimeout(res, 10000));
-  console.log(result.businessLists);
   return result.businessLists;
 }
-export { getAllCategories, getAllBusinessList };
+
+async function getBusinessByCategory(
+  category: string
+): Promise<BusinessListsType> {
+  const query =
+    gql`
+  query MyQuery {
+  businessLists(where: {category: {name: "` +
+    category +
+    `"}}) {
+    about
+    address
+    category {
+      name
+    }
+    contactPerson
+    email
+    id
+    name
+    images {
+      url
+    }
+  }
+}`;
+
+  const result = (await request(MASTER_URL, query)) as {
+    businessLists: BusinessListsType;
+  };
+
+  return result.businessLists;
+}
+
+async function getBusinessById(businessId: string): Promise<BusinessListType> {
+  const query =
+    gql`
+    query getBusinessById {
+      businessList(where: { id: "` +
+    businessId +
+    `" }) {
+        about
+        address
+        category {
+          name
+        }
+        contactPerson
+        email
+        id
+        name
+        images {
+          url
+        }
+      }
+    }
+  `;
+
+  const result = (await request(MASTER_URL, query)) as {
+    businessList: BusinessListType;
+  };
+
+  return result.businessList;
+}
+
+export {
+  getAllCategories,
+  getAllBusinessList,
+  getBusinessByCategory,
+  getBusinessById,
+};

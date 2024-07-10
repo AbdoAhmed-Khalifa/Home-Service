@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import { getAllCategories } from '../_services/GlobalApi';
 import { GraphCategoriesType } from '../_types/graphCategoriesType';
 import CategoryListCard from './CategoryListCard';

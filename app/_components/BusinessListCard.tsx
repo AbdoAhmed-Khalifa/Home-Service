@@ -1,14 +1,18 @@
 import { BusinessListType } from '../_types/businessListType';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 type BusinessListCardProps = {
   business: BusinessListType;
 };
 export default function BusinessListCard({ business }: BusinessListCardProps) {
-  const { images, name, address, category, contactPerson } = business;
+  const { images, name, address, category, contactPerson, id } = business;
 
   return (
-    <div className="shadow-md rounded-lg hover:shadow-lg hover:shadow-blue-300 cursor-pointer hover:scale-105 transition-all ease-in-out">
+    <Link
+      href={`/details/${id}`}
+      className="shadow-md rounded-lg hover:shadow-lg hover:shadow-blue-300 cursor-pointer hover:scale-105 transition-all ease-in-out"
+    >
       <Image
         src={images[0].url}
         width={500}
@@ -27,6 +31,6 @@ export default function BusinessListCard({ business }: BusinessListCardProps) {
           <Button className="rounded-lg mt-3">Book Now</Button>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }

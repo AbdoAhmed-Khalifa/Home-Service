@@ -11,6 +11,6 @@ export type BusinessListType = {
   };
 };
 
-type ImageType = {
+export type ImageType = {
   url: string;
 };
