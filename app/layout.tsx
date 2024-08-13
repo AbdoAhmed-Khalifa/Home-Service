@@ -20,6 +20,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" href="/icon.jpg" />
+      </head>
       <body className={outfit.className}>
         <NextAuthSessionProvider>
           <Header />
