@@ -25,7 +25,7 @@ const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async jwt({ token, account, profile }) {
-      console.log('JWT callback:', { token, account, profile }); // Added logging
+     
       if (account) {
         return {
           ...token,
@@ -76,7 +76,7 @@ const authOptions: NextAuthOptions = {
     },
 
     async session({ session, token }) {
-      console.log('Session callback:', { session, token }); // Added logging
+      
       if (token.profile) {
         session.user = token.profile;
       }

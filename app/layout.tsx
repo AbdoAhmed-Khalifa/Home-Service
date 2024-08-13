@@ -22,6 +22,7 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <link rel="icon" href="/icon.jpg" />
+        <title>Home Service</title>
       </head>
       <body className={outfit.className}>
         <NextAuthSessionProvider>
