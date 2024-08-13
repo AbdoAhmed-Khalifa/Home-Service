@@ -11,7 +11,7 @@ const authOptions: NextAuthOptions = {
       authorization: { params: { scope: 'openid email profile' } },
       idToken: true,
       clientId: process.env.DESCOPE_CLIENT_ID,
-      clientSecret: process.env.DESCOPE_CLIENT_SECRET,
+      clientSecret: '<Descope Access Key>',
       checks: ['pkce', 'state'],
       profile(profile) {
         return {
@@ -25,6 +25,7 @@ const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async jwt({ token, account, profile }) {
+      console.log('JWT callback:', { token, account, profile }); // Added logging
       if (account) {
         return {
           ...token,
@@ -75,6 +76,7 @@ const authOptions: NextAuthOptions = {
     },
 
     async session({ session, token }) {
+      console.log('Session callback:', { session, token }); // Added logging
       if (token.profile) {
         session.user = token.profile;
       }
