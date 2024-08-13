@@ -13,7 +13,7 @@ export default function BusinessInfo({
       <Image
         className="rounded-full h-[150px]
         object-cover mx-auto"
-        src={business?.images[0].url}
+        src={business?.images[0]}
         alt={business.name}
         width={150}
         height={200}

@@ -11,7 +11,7 @@ export default function CategoryListCard({ category }: CategoryListCardProps) {
       href={`/search/${name}`}
       className="flex flex-col items-center  justify-center gap-2 bg-blue-50 p-5 rounded-lg cursor-pointer hover:scale-110 transition-all ease-in-out"
     >
-      <Image width={35} height={35} src={icon.url} alt={name} />
+      <Image width={35} height={35} src={icon} alt={name} />
       <h2 className="text-primary">{name}</h2>
     </Link>
   );

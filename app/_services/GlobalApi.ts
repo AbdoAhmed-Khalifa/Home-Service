@@ -1,115 +1,221 @@
-import request, { gql } from 'graphql-request';
+import { initializeApp } from 'firebase/app';
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  DocumentReference,
+  getDoc,
+  doc,
+  addDoc,
+  serverTimestamp,
+  query,
+  where,
+} from 'firebase/firestore';
 import { GraphCategoriesType } from '../_types/graphCategoriesType';
 import { BusinessListsType } from '../_types/businessListsType';
 import { BusinessListType } from '../_types/businessListType';
+import { BookingType } from '../_types/bookingType';
 
-const MASTER_URL = `https://api-eu-central-1-shared-euc1-02.hygraph.com/v2/${process.env.NEXT_PUBLIC_MASTER_URL_KEY}/master`;
+const firebaseConfig = {
+  apiKey: 'AIzaSyDcbx1Dh5_6xdrqkbjLfK4QNheWm72_MAI',
+  authDomain: 'doctor-booking-b4966.firebaseapp.com',
+  projectId: 'doctor-booking-b4966',
+  storageBucket: 'doctor-booking-b4966.appspot.com',
+  messagingSenderId: '410853786069',
+  appId: '1:410853786069:web:45e826d5a4a0355e113d5c',
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 async function getAllCategories(): Promise<GraphCategoriesType> {
-  const query = gql`
-    query Category {
-      categories {
-        id
-        name
-        icon {
-          url
-        }
-        bgcolor
-      }
-    }
-  `;
-  // await new Promise(res => setTimeout(res, 2000));
-  const result = (await request(MASTER_URL, query)) as GraphCategoriesType;
+  const categories: GraphCategoriesType['categories'] = [];
+  const querySnapshot = await getDocs(collection(db, 'Category'));
 
-  return result;
+  querySnapshot.forEach(doc => {
+    categories.push({
+      id: doc.id,
+      ...(doc.data() as Omit<GraphCategoriesType['categories'][0], 'id'>),
+    });
+  });
+
+  return { categories };
 }
 
 async function getAllBusinessList(): Promise<BusinessListsType> {
-  const query = gql`
-    query BusinessList {
-      businessLists {
-        about
-        address
-        contactPerson
-        email
-        images {
-          url
-        }
-        id
-        name
-        category {
-          name
-        }
+  const businessLists: BusinessListsType = [];
+  const querySnapshot = await getDocs(collection(db, 'Business List'));
+
+  for (const doc of querySnapshot.docs) {
+    const data = doc.data();
+    let categoryName = '';
+
+    // Fetch category data if it exists
+    if (data.category && data.category instanceof DocumentReference) {
+      const categoryDoc = await getDoc(data.category);
+      if (categoryDoc.exists()) {
+        categoryName = categoryDoc.data().name || '';
       }
     }
-  `;
 
-  const result = (await request(MASTER_URL, query)) as {
-    businessLists: BusinessListsType;
-  };
-  // await new Promise(res => setTimeout(res, 10000));
-  return result.businessLists;
+    businessLists.push({
+      id: doc.id,
+      about: data.about,
+      address: data.address,
+      contactPerson: data.contactPerson,
+      email: data.email,
+      images: data.images,
+      name: data.name,
+      category: {
+        name: categoryName,
+      },
+    });
+  }
+
+  return businessLists;
 }
 
 async function getBusinessByCategory(
   category: string
 ): Promise<BusinessListsType> {
-  const query =
-    gql`
-  query MyQuery {
-  businessLists(where: {category: {name: "` +
-    category +
-    `"}}) {
-    about
-    address
-    category {
-      name
-    }
-    contactPerson
-    email
-    id
-    name
-    images {
-      url
-    }
-  }
-}`;
+  const businessLists: BusinessListsType = [];
+  const querySnapshot = await getDocs(collection(db, 'Business List'));
 
-  const result = (await request(MASTER_URL, query)) as {
-    businessLists: BusinessListsType;
-  };
+  for (const doc of querySnapshot.docs) {
+    const data = doc.data();
 
-  return result.businessLists;
-}
-
-async function getBusinessById(businessId: string): Promise<BusinessListType> {
-  const query =
-    gql`
-    query getBusinessById {
-      businessList(where: { id: "` +
-    businessId +
-    `" }) {
-        about
-        address
-        category {
-          name
-        }
-        contactPerson
-        email
-        id
-        name
-        images {
-          url
-        }
+    if (data.category && data.category instanceof DocumentReference) {
+      const categoryDoc = await getDoc(data.category);
+      if (categoryDoc.exists() && categoryDoc.data().name === category) {
+        businessLists.push({
+          id: doc.id,
+          about: data.about,
+          address: data.address,
+          contactPerson: data.contactPerson,
+          email: data.email,
+          name: data.name,
+          category: {
+            name: category,
+          },
+          images: data.images,
+        });
       }
     }
-  `;
+  }
 
-  const result = (await request(MASTER_URL, query)) as {
-    businessList: BusinessListType;
-  };
+  return businessLists;
+}
+async function getBusinessById(businessId: string): Promise<BusinessListType> {
+  const docRef = doc(db, 'Business List', businessId);
+  const docSnap = await getDoc(docRef);
 
-  return result.businessList;
+  if (docSnap.exists()) {
+    const data = docSnap.data();
+    let categoryName = '';
+
+    // Fetch category data if it exists
+    if (data.category && data.category instanceof DocumentReference) {
+      const categoryDoc = await getDoc(data.category);
+      if (categoryDoc.exists()) {
+        categoryName = categoryDoc.data().name || '';
+      }
+    }
+
+    return {
+      id: docSnap.id,
+      about: data.about,
+      address: data.address,
+      category: {
+        name: categoryName,
+      },
+      contactPerson: data.contactPerson,
+      email: data.email,
+      name: data.name,
+      images: data.images,
+    };
+  } else {
+    throw new Error('Business not found');
+  }
+}
+
+async function createNewBooking(
+  businessId: string,
+  date: string,
+  time: string,
+  userEmail: string,
+  userName: string
+): Promise<string> {
+  try {
+    const bookingRef = await addDoc(collection(db, 'Bookings'), {
+      businessId,
+      date,
+      time,
+      userEmail,
+      userName,
+      bookingStatus: 'Booked',
+      createdAt: serverTimestamp(),
+    });
+
+    return bookingRef.id;
+  } catch (error) {
+    console.error('Firestore error:', error);
+    throw new Error('Failed to create booking');
+  }
+}
+
+async function getBookedBusiness(
+  businessId: string,
+  date: string
+): Promise<{ date: string; time: string }[]> {
+  const bookingsRef = collection(db, 'Bookings');
+  const q = query(
+    bookingsRef,
+    where('businessId', '==', businessId),
+    where('date', '==', date)
+  );
+
+  const querySnapshot = await getDocs(q);
+  const bookings: { date: string; time: string }[] = [];
+
+  querySnapshot.forEach(doc => {
+    const data = doc.data();
+    bookings.push({
+      date: data.date,
+      time: data.time,
+    });
+  });
+
+  return bookings;
+}
+
+async function getUserBookingHistory(email: string): Promise<BookingType[]> {
+  const bookingsRef = collection(db, 'Bookings');
+  const q = query(bookingsRef, where('userEmail', '==', email));
+  const querySnapshot = await getDocs(q);
+
+  const bookings: BookingType[] = [];
+
+  for (const bookingDoc of querySnapshot.docs) {
+    const bookingData = bookingDoc.data();
+    const businessDocRef = doc(db, 'Business List', bookingData.businessId);
+    const businessDoc = await getDoc(businessDocRef);
+    const businessData = businessDoc.data();
+
+    if (businessData) {
+      bookings.push({
+        business: {
+          name: businessData.name,
+          images: businessData.images,
+          contactPerson: businessData.contactPerson,
+          address: businessData.address,
+        },
+        date: bookingData.date,
+        time: bookingData.time,
+      });
+    }
+  }
+
+  return bookings;
 }
 
 export {
@@ -117,4 +223,7 @@ export {
   getAllBusinessList,
   getBusinessByCategory,
   getBusinessById,
+  createNewBooking,
+  getBookedBusiness,
+  getUserBookingHistory,
 };

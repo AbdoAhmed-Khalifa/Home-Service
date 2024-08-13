@@ -14,15 +14,11 @@ export default function SideBarLink({ category }: { category: CategoryType }) {
       className={`flex gap-2 p-3 rounded-lg border mb-3 cursor-pointer md:mr-10 hover:bg-blue-50 hover:text-primary hover:border-primary 
     hover:shadow-md 
     items-center transition-all ease-in-out ${
-      urlCategory === category.name && 'bg-blue-50 text-primary border-primary shadow-md'
+      urlCategory === category.name &&
+      'bg-blue-50 text-primary border-primary shadow-md'
     }`}
     >
-      <Image
-        src={category.icon.url}
-        alt={category.name}
-        width={30}
-        height={30}
-      />
+      <Image src={category.icon} alt={category.name} width={30} height={30} />
       <h2>{category.name}</h2>
     </Link>
   );

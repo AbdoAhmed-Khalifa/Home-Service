@@ -4,6 +4,9 @@ import { BusinessListsType } from '../_types/businessListsType';
 import { getBusinessByCategory } from '../_services/GlobalApi';
 import Image from 'next/image';
 import Link from 'next/link';
+
+import BookingSection from './BookingSection';
+
 export default async function SuggestedBusinessList({
   categoryName,
 }: {
@@ -13,12 +16,10 @@ export default async function SuggestedBusinessList({
     categoryName
   );
 
+  console.log();
   return (
-    <div className="md:pl-10 ">
-      <Button title="Book Appointment" className="flex gap-2 w-full">
-        <NotebookPen />
-        <span className=" lg:block hidden">Book Appointment</span>
-      </Button>
+    <div className="md:pl-10">
+      <BookingSection />
       <div className="md:block hidden">
         <h2 className="font-bold text-lg my-3 md:block hidden">
           Similar Business
@@ -32,7 +33,7 @@ export default async function SuggestedBusinessList({
             >
               <Image
                 className="rounded-lg object-cover"
-                src={business.images[2].url || business.images[0].url}
+                src={business.images[2] || business.images[0]}
                 width={90}
                 height={80}
                 alt={business.name}

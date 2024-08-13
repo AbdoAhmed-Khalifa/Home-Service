@@ -3,7 +3,7 @@ export type BusinessListType = {
   address: string;
   contactPerson: string;
   email: string;
-  images: ImageType[];
+  images: string[];
   id: string;
   name: string;
   category: {

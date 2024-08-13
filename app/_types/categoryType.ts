@@ -1,8 +1,6 @@
 export type CategoryType = {
   id: string;
   name: string;
-  icon: {
-    url: string;
-  };
+  icon: string;
   bgcolor: string;
 };

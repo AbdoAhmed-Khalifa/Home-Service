@@ -10,6 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import Link from 'next/link';
 export default function SignButton() {
   const { data } = useSession();
   console.log(data);
@@ -30,7 +31,9 @@ export default function SignButton() {
           <DropdownMenuContent>
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>My Booking</DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link href="/myBooking">My Booking</Link>
+            </DropdownMenuItem>
             <DropdownMenuItem onClick={() => signOut()}>
               Logout
             </DropdownMenuItem>

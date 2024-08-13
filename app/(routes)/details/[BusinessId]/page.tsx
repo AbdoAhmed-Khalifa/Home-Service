@@ -1,6 +1,5 @@
 import { getBusinessById } from '@/app/_services/GlobalApi';
 import Auth from './Auth';
-import { BusinessListType } from '@/app/_types/businessListType';
 import BusinessInfo from '@/app/_components/BusinessInfo';
 import BusinessDescription from '@/app/_components/BusinessDescription';
 import SuggestedBusinessList from '@/app/_components/SuggestedBusinessList';
@@ -12,7 +11,6 @@ type DetailsPage = {
 
 export default async function Page({ params }: DetailsPage) {
   const business = await getBusinessById(params.BusinessId);
-
   return (
     <Auth business={business}>
       <div className="py-8 px-10 md:py-20 xl:px-36 lg:px-24">

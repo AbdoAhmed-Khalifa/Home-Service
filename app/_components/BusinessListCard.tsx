@@ -6,7 +6,8 @@ type BusinessListCardProps = {
   business: BusinessListType;
 };
 export default function BusinessListCard({ business }: BusinessListCardProps) {
-  const { images, name, address, category, contactPerson, id } = business;
+  const { images, name, address, category, contactPerson, id, about } =
+    business;
 
   return (
     <Link
@@ -14,7 +15,7 @@ export default function BusinessListCard({ business }: BusinessListCardProps) {
       className="shadow-md rounded-lg hover:shadow-lg hover:shadow-blue-300 cursor-pointer hover:scale-105 transition-all ease-in-out"
     >
       <Image
-        src={images[0].url}
+        src={images[0]}
         width={500}
         height={200}
         alt={name}

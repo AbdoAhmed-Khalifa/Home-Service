@@ -1,12 +1,11 @@
 import Image from 'next/image';
-import { ImageType } from '../_types/businessListType';
 
 export default function BusinessDescription({
   description,
   images,
 }: {
   description: string;
-  images: ImageType[];
+  images: string[];
 }) {
   return (
     <div>
@@ -19,7 +18,7 @@ export default function BusinessDescription({
             width={700}
             height={200}
             key={index}
-            src={img.url}
+            src={img}
             alt="image"
             className="rounded-lg min-h-32 max-h-[185px]"
           />

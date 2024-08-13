@@ -12,7 +12,7 @@ export default function Hero() {
       <h2 className="text-xl text-gray-400">
         Explore Best Home Service & Repair Near You
       </h2>
-      <div className="mt-4 flex items-center gap-4">
+      {/* <div className="mt-4 flex items-center gap-4">
         <Input
           placeholder="Search"
           className="rounded-full sm:w-[350px]
@@ -24,7 +24,7 @@ export default function Hero() {
         >
           <Search className="h-4 w-4" />
         </Button>
-      </div>
+      </div> */}
     </div>
   );
 }
