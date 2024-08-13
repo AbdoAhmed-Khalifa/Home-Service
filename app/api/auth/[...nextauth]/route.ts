@@ -25,7 +25,6 @@ const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async jwt({ token, account, profile }) {
-     
       if (account) {
         return {
           ...token,
@@ -76,7 +75,6 @@ const authOptions: NextAuthOptions = {
     },
 
     async session({ session, token }) {
-      
       if (token.profile) {
         session.user = token.profile;
       }
