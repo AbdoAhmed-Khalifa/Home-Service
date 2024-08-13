@@ -49,7 +49,7 @@ const authOptions: NextAuthOptions = {
               headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
               body: new URLSearchParams({
                 client_id: process.env.DESCOPE_CLIENT_ID as string,
-                client_secret: process.env.DESCOPE_CLIENT_SECRET as string,
+                client_secret: '<Descope Access Key>',
                 grant_type: 'refresh_token',
                 refresh_token: token.refresh_token as string,
               }).toString(),
