@@ -13,6 +13,7 @@ Welcome to the **Home Service** repository! This project is a web application de
 
 - **React**: A JavaScript library for building user interfaces.
 - **Next.js**: A React framework for server-side rendering and static site generation.
+- **TypeScript**: A superset of JavaScript that adds static types, enhancing the development process.
 - **Tailwind CSS**: A utility-first CSS framework for styling.
 - **Descope**: Authentication and user management.
 - **NextAuth**: Authentication for Next.js applications.
