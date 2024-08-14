@@ -23,25 +23,26 @@ To get started with this project, follow these steps:
 
 1. **Clone the Repository**
 
-   ```bash
-   git clone https://github.com/AbdoAhmed-Khalifa/Home-Service.git
-   ```
+      ```bash
+      git clone https://github.com/AbdoAhmed-Khalifa/Home-Service.git
+      ```
 
  2. **Navigate to the Project Directory**
 
-   ```bash
-   cd Home-Service
-   ```
+      ```bash
+      cd Home-Service
+      ```
 3. **Install Dependencies**
+   
+      ```bash
+      npm install
+      ```
+ 4. ##Set Up Environment Variables
 
-   ```bash
-   npm install
-   ```
- 4. **Set Up Environment Variables**
       Create a .env.local file in the root directory of the project and add your environment variables. Refer to .env.example for the required variables.
     
- 5. **Run the Development Server**
+ 6. **Run the Development Server**
 
-   ```bash
-   npm run dev
-   ```
+      ```bash
+      npm run dev
+      ```
