@@ -7,11 +7,12 @@ const authOptions: NextAuthOptions = {
       id: 'descope',
       name: 'Descope',
       type: 'oauth',
-      wellKnown: `https://api.descope.com/P2isZ8JhN9X1TaQFovMlGRllWLCm/.well-known/openid-configuration`,
+      wellKnown: `https://api.descope.com/${process.env.DESCOPE_CLIENT_ID}/.well-known/openid-configuration`,
       authorization: { params: { scope: 'openid email profile' } },
       idToken: true,
       clientId: process.env.DESCOPE_CLIENT_ID,
-      clientSecret: '<Descope Access Key>',
+      clientSecret:
+        'K2kdnzOfYDSkedEuxHH4FiC6177VsrcPD8dsnwDak71StloEskkk2fEz0fd9S0NePkUbmqW',
       checks: ['pkce', 'state'],
       profile(profile) {
         return {
@@ -49,7 +50,8 @@ const authOptions: NextAuthOptions = {
               headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
               body: new URLSearchParams({
                 client_id: process.env.DESCOPE_CLIENT_ID as string,
-                client_secret: '<Descope Access Key>',
+                client_secret:
+                  'K2kdnzOfYDSkedEuxHH4FiC6177VsrcPD8dsnwDak71StloEskkk2fEz0fd9S0NePkUbmqW',
                 grant_type: 'refresh_token',
                 refresh_token: token.refresh_token as string,
               }).toString(),
