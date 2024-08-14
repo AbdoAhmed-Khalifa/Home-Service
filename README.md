@@ -37,7 +37,7 @@ To get started with this project, follow these steps:
       ```bash
       npm install
       ```
- 4. ##Set Up Environment Variables
+ 4. **Set Up Environment Variables**
 
       Create a .env.local file in the root directory of the project and add your environment variables. Refer to .env.example for the required variables.
     
